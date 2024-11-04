@@ -179,27 +179,15 @@ function App() {
       </div>
 
       <div className="matrix-container" ref={captureRef} style={{ position: 'relative', margin: '60px 100px 80px 100px' }}>
-        {/* Y-axis label container with fixed width */}
-        <div style={{ 
+        <div className="y-axis-label" style={{ 
           position: 'absolute', 
           left: '-100px', 
-          top: '50%',
-          width: '200px',  // Fixed width container
-          height: '40px',  // Fixed height
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          top: '50%', 
           transform: 'rotate(-90deg) translateX(50%)',
-          transformOrigin: 'right center'
+          whiteSpace: 'nowrap',
+          fontWeight: 'bold'
         }}>
-          <div style={{
-            fontWeight: 'bold',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            {yAxisTitle}
-          </div>
+          {yAxisTitle}
         </div>
         
         {/* Y-axis values */}
