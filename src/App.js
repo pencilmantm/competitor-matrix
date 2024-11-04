@@ -179,15 +179,23 @@ function App() {
       </div>
 
       <div className="matrix-container" ref={captureRef} style={{ position: 'relative', margin: '60px 100px 80px 100px' }}>
-        <div className="y-axis-label" style={{ 
-          position: 'absolute', 
-          left: '-100px', 
-          top: '50%', 
-          transform: 'rotate(-90deg) translateX(50%)',
-          whiteSpace: 'nowrap',
-          fontWeight: 'bold'
+        <div style={{ 
+          position: 'absolute',
+          top: '58%',
+          left: '-90px',
+          transform: 'translate(0, -50%) rotate(-90deg)',
+          transformOrigin: 'left top'
         }}>
-          {yAxisTitle}
+          <div style={{
+            textAlign: 'center'
+          }}>
+            <div className="y-axis-label" style={{
+              fontWeight: 'bold',
+              whiteSpace: 'nowrap'
+            }}>
+              {yAxisTitle}
+            </div>
+          </div>
         </div>
         
         {/* Y-axis values */}
