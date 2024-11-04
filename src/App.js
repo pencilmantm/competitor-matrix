@@ -5,7 +5,15 @@ import toast, { Toaster } from 'react-hot-toast';
 import './App.css';
 
 function App() {
-  const [components, setComponents] = React.useState([]);
+  const [components, setComponents] = React.useState([
+    // Default company component
+    {
+      id: 'our-company',
+      text: '🚀 Our Company',
+      color: '#fde68a', // yellow
+      isDefault: true
+    }
+  ]);
   const [inputText, setInputText] = React.useState('');
   const [xAxisTitle, setXAxisTitle] = React.useState('X Axis');
   const [yAxisTitle, setYAxisTitle] = React.useState('Y Axis');
@@ -15,7 +23,7 @@ function App() {
 
   const colors = [
     '#bfdbfe', '#bbf7d0', '#fecaca', '#fed7aa', 
-    '#e9d5ff', '#fde68a', '#ddd6fe', '#99f6e4'
+    '#e9d5ff', '#ddd6fe', '#99f6e4'  // Removed yellow as it's used for default component
   ];
 
   const addComponent = () => {
@@ -24,7 +32,8 @@ function App() {
       setComponents([...components, { 
         id: Date.now(), 
         text: inputText,
-        color: colors[colorIndex]
+        color: colors[colorIndex],
+        isDefault: false
       }]);
       setInputText('');
     }
@@ -47,7 +56,7 @@ function App() {
   };
 
   const deleteComponent = (id) => {
-    setComponents(components.filter(comp => comp.id !== id));
+    setComponents(components.filter(comp => !comp.isDefault && comp.id !== id));
   };
 
   const captureScreen = async () => {
@@ -170,16 +179,27 @@ function App() {
       </div>
 
       <div className="matrix-container" ref={captureRef} style={{ position: 'relative', margin: '60px 100px 80px 100px' }}>
-        {/* Y-axis label */}
-        <div className="y-axis-label" style={{ 
+        {/* Y-axis label container with fixed width */}
+        <div style={{ 
           position: 'absolute', 
           left: '-100px', 
-          top: '50%', 
+          top: '50%',
+          width: '200px',  // Fixed width container
+          height: '40px',  // Fixed height
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           transform: 'rotate(-90deg) translateX(50%)',
-          whiteSpace: 'nowrap',
-          fontWeight: 'bold'
+          transformOrigin: 'right center'
         }}>
-          {yAxisTitle}
+          <div style={{
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>
+            {yAxisTitle}
+          </div>
         </div>
         
         {/* Y-axis values */}
@@ -238,7 +258,7 @@ function App() {
           </div>
 
           {components.map(comp => (
-            <Draggable key={comp.id} bounds="parent">
+            <Draggable key={comp.id} bounds="parent" defaultPosition={comp.isDefault ? { x: 280, y: 280 } : { x: 10, y: 10 }}>
               <div style={{
                 position: 'absolute',
                 padding: '12px',
@@ -252,25 +272,27 @@ function App() {
                 gap: '8px'
               }}>
                 {comp.text}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteComponent(comp.id);
-                  }}
-                  className="delete-button"
-                  style={{
-                    padding: '2px 6px',
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  ✕
-                </button>
+                {!comp.isDefault && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteComponent(comp.id);
+                    }}
+                    className="delete-button"
+                    style={{
+                      padding: '2px 6px',
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
             </Draggable>
           ))}
